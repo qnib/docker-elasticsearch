@@ -1,0 +1,7 @@
+#node.rack: ${RACK_ENV_VAR}
+#cluster.name: elasticsearch
+#node.name: "Franz Kafka"
+#node.master: true
+#node.data: true
+http.cors.allow-origin: "/.*/"
+http.cors.enabled: true
