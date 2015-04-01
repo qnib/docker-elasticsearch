@@ -1,7 +1,4 @@
-###### ES
-# A docker image that includes
-# - elasticsearch 
-FROM qnib/terminal
+FROM qnib/terminal:cos7
 MAINTAINER "Christian Kniep <christian@qnib.org>"
 
 EXPOSE 9200
