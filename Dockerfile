@@ -22,4 +22,4 @@ ADD etc/supervisord.d/elasticsearch.ini /etc/supervisord.d/elasticsearch.ini
 ADD opt/qnib/bin/start_elasticsearch.sh /opt/qnib/bin/
 ADD etc/consul.d/check_elasticsearch.json /etc/consul.d/
 ADD etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/
-
+ENV ES_CLUSTER_NAME qnib2015
