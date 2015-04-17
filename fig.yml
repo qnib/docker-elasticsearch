@@ -1,0 +1,34 @@
+consul:
+    image: qnib/consul
+    ports:
+     - "8500:8500"
+    environment:
+    - DC_NAME=dc1
+    dns: 127.0.0.1
+    hostname: consul
+    privileged: true
+
+elasticsearch:
+    image: qnib/elasticsearch
+    #build: .
+    ports:
+    - "9200:9200"
+    links:
+    - consul:consul
+    environment:
+    - DC_NAME=dc1
+    dns: 127.0.0.1
+    hostname: elasticsearch
+    volumes:
+    - /var/lib/elasticsearch
+    privileged: true
+
+kopf:
+  image: lmenezes/elasticsearch-kopf
+  ports:
+  - 8088:80
+  links:
+  - elasticsearch:elasticsearch
+  environment:
+  - KOPF_SERVER_NAME=dockerhost
+  - KOPF_ES_SERVERS=172.17.42.1:9200
