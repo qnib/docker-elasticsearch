@@ -3,9 +3,11 @@
 
 function wait_es {
     # wait for es to come up
-    if [ ! $(curl -s localhost:9200|grep "ok"|grep true) ];then
+    if [ $(curl -s localhost:9200|grep status|grep -c 200) -ne 1 ];then
         sleep 1
         wait_es
+    else
+        echo "$(date +'%F %H:%M:%S') > Elasticsearch return status 200 -> good to go"
     fi
 }
 
@@ -30,10 +32,10 @@ trap "curl -XPOST 'http://localhost:9200/_cluster/nodes/_local/_shutdown'" TERM 
     -Des.default.path.conf=/etc/elasticsearch &
 
 sleep 10
-
+wait_es
 
 if [ "X${ES_IDX}" != "X" ];then
-    echo " Deleting index ${ES_IDX}"
+    echo "$(date +'%F %H:%M:%S') > Deleting index ${ES_IDX}"
     curl -XDELETE "http://localhost:9200/${ES_IDX}"
     echo '\n PUT index settings.'
     if [ -f /opt/qnib/etc/${ES_IDX}/settings.json ];then
