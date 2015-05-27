@@ -23,3 +23,6 @@ ADD opt/qnib/bin/start_elasticsearch.sh /opt/qnib/bin/
 ADD etc/consul.d/check_elasticsearch.json /etc/consul.d/
 ADD etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/
 ENV ES_CLUSTER_NAME qnib2015
+## Install JDBC plugin
+RUN /usr/share/elasticsearch/bin/plugin --install jdbc --url http://xbib.org/repository/org/xbib/elasticsearch/plugin/elasticsearch-river-jdbc/1.4.4.5/elasticsearch-river-jdbc-1.4.4.5-plugin.zip
+RUN cd /usr/share/elasticsearch/plugins/jdbc/ && wget -q https://jdbc.postgresql.org/download/postgresql-9.3-1103.jdbc4.jar
