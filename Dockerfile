@@ -9,7 +9,7 @@ VOLUME ["/var/lib/elasticsearch"]
 # Java
 RUN yum install -y java-1.8.0-openjdk
 
-ADD etc/yum.repos.d/elasticsearch-1.4.repo /etc/yum.repos.d/
+ADD etc/yum.repos.d/elasticsearch.repo /etc/yum.repos.d/
 RUN rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
 # which is needed by ES
 RUN yum install -y which
@@ -23,6 +23,3 @@ ADD opt/qnib/bin/start_elasticsearch.sh /opt/qnib/bin/
 ADD etc/consul.d/check_elasticsearch.json /etc/consul.d/
 ADD etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/
 ENV ES_CLUSTER_NAME qnib2015
-## Install JDBC plugin
-RUN /usr/share/elasticsearch/bin/plugin --install jdbc --url http://xbib.org/repository/org/xbib/elasticsearch/plugin/elasticsearch-river-jdbc/1.4.4.5/elasticsearch-river-jdbc-1.4.4.5-plugin.zip
-RUN cd /usr/share/elasticsearch/plugins/jdbc/ && wget -q https://jdbc.postgresql.org/download/postgresql-9.3-1103.jdbc4.jar

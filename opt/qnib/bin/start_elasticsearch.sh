@@ -24,6 +24,10 @@ function wait_pid {
 
 trap "curl -XPOST 'http://localhost:9200/_cluster/nodes/_local/_shutdown'" TERM KILL EXIT
 
+sed -i'' -e "s/ES_DATA_NODE/${ES_DATA_NODE-true}/" /etc/elasticsearch/elasticsearch.yml
+sed -i'' -e "s/ES_MASTER_NODE/${ES_MASTER_NODE-true}/" /etc/elasticsearch/elasticsearch.yml
+sed -i'' -e "s/ES_CLUSTER_NAME/${ES_CLUSTER_NAME-qnib}/" /etc/elasticsearch/elasticsearch.yml
+
 /usr/share/elasticsearch/bin/elasticsearch -p /var/run/elasticsearch/elasticsearch.pid \
     -Des.default.path.home=/usr/share/elasticsearch \
     -Des.default.path.logs=/var/log/elasticsearch \

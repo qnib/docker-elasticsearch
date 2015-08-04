@@ -1,7 +1,7 @@
 #node.rack: ${RACK_ENV_VAR}
-cluster.name: ${ES_CLUSTER_NAME}
+cluster.name: ES_CLUSTER_NAME
 #node.name: "Franz Kafka"
-#node.master: true
-#node.data: true
+node.master: ES_MASTER_NODE
+node.data: ES_DATA_NODE
 http.cors.allow-origin: "/.*/"
 http.cors.enabled: true

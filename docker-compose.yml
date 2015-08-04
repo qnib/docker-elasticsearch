@@ -1,0 +1,30 @@
+consul:
+  extends:
+    file: es.yml
+    service: consul
+
+esm1:
+  extends:
+    file: es.yml
+    service: es
+  hostname: esm1
+  environment:
+  - ES_DATA_NODE=false
+  - ES_CLUSTER_NAME=gaikai
+
+esm2:
+  extends:
+    file: es.yml
+    service: es
+  hostname: esm2
+  environment:
+  - ES_DATA_NODE=false
+  - ES_CLUSTER_NAME=gaikai
+
+esd:
+  extends:
+    file: es.yml
+    service: es
+  environment:
+  - ES_MASTER_NODE=false
+  - ES_CLUSTER_NAME=gaikai
