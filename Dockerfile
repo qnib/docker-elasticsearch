@@ -7,7 +7,7 @@ EXPOSE 9200
 VOLUME ["/var/lib/elasticsearch"]
 
 # Java
-RUN yum install -y java-1.8.0-openjdk
+RUN yum install -y java-1.7.0-openjdk
 
 ADD etc/yum.repos.d/elasticsearch.repo /etc/yum.repos.d/
 RUN rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
