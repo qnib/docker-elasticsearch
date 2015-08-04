@@ -1,8 +1,7 @@
 ###### ES
 # A docker image that includes
 # - elasticsearch 
-FROM qnib/terminal:light
-MAINTAINER "Christian Kniep <christian@qnib.org>"
+FROM qnib/terminal
 
 EXPOSE 9200
 VOLUME ["/var/lib/elasticsearch"]
@@ -11,6 +10,7 @@ VOLUME ["/var/lib/elasticsearch"]
 RUN yum install -y java-1.8.0-openjdk
 
 ADD etc/yum.repos.d/elasticsearch-1.4.repo /etc/yum.repos.d/
+RUN rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
 # which is needed by ES
 RUN yum install -y which
 
