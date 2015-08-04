@@ -9,7 +9,7 @@ consul:
     privileged: true
 
 elasticsearch:
-    image: qnib/elasticsearch
+    image: qnib/elasticsearch:1.7
     #build: .
     ports:
     - "9200:9200"
