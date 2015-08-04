@@ -3,28 +3,41 @@ consul:
     file: es.yml
     service: consul
 
+kopf:
+  extends:
+    file: es.yml
+    service: kopf
+
+
+esm0:
+  extends:
+    file: es.yml
+    service: elasticsearch
+  hostname: esm0
+  links:
+  - consul:consul
+  ports:
+  - "9200:9200"
+  environment:
+  - ES_DATA_NODE=false
+
 esm1:
   extends:
     file: es.yml
-    service: es
+    service: elasticsearch
+  ports:
+  - "9201:9200"
   hostname: esm1
+  links:
+  - consul:consul
   environment:
   - ES_DATA_NODE=false
-  - ES_CLUSTER_NAME=gaikai
-
-esm2:
-  extends:
-    file: es.yml
-    service: es
-  hostname: esm2
-  environment:
-  - ES_DATA_NODE=false
-  - ES_CLUSTER_NAME=gaikai
 
 esd:
   extends:
     file: es.yml
-    service: es
+    service: elasticsearch
+  links:
+  - consul:consul
   environment:
   - ES_MASTER_NODE=false
-  - ES_CLUSTER_NAME=gaikai
