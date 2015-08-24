@@ -28,6 +28,15 @@ sed -i'' -e "s/ES_NODE_NAME/${ES_NODE_NAME-$(hostname)}/" /etc/elasticsearch/ela
 sed -i'' -e "s/ES_DATA_NODE/${ES_DATA_NODE-true}/" /etc/elasticsearch/elasticsearch.yml
 sed -i'' -e "s/ES_MASTER_NODE/${ES_MASTER_NODE-true}/" /etc/elasticsearch/elasticsearch.yml
 sed -i'' -e "s/ES_CLUSTER_NAME/${ES_CLUSTER_NAME-qnib}/" /etc/elasticsearch/elasticsearch.yml
+if [ "X${ES_NET_PUBLISH}" != "X" ];then
+    sed  -i'' "/http\.cors\.enabled/a network.publish_host: ${ES_NET_PUBLISH}" /etc/elasticsearch/elasticsearch.yml
+fi
+if [ "X${ES_ZEN_MULTICAST_ENABLED}" != "X" ];then
+    sed  -i'' "/http\.cors\.enabled/a discovery.zen.ping.multicast.enabled: ${ES_ZEN_MULTICAST_ENABLED}" /etc/elasticsearch/elasticsearch.yml
+fi
+if [ "X${ES_ZEN_MULTICAST_HOSTS}" != "X" ];then
+    sed  -i'' "/discovery\.zen\.ping\.multicast\.enabled/a discovery.zen.ping.unicast.hosts: [\"${ES_ZEN_MULTICAST_HOSTS}\"]" /etc/elasticsearch/elasticsearch.yml
+fi
 
 /usr/share/elasticsearch/bin/elasticsearch -p /var/run/elasticsearch/elasticsearch.pid \
     -Des.default.path.home=/usr/share/elasticsearch \
