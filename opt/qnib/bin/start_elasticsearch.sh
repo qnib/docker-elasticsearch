@@ -22,41 +22,18 @@ function wait_pid {
     fi
 }
 
+if [ "X${ES_TAGS}" != "X" ];then
+   TAGS=$(python -c 'import os;print "\",\"".join(os.environ["ES_TAGS"].split(","))')
+   sed -i'' -e "s/\"tags\":.*/\"tags\": [\"${TAGS}\"],/" /etc/consul.d/check_elasticsearch.json
+   consul reload
+fi
+
 trap "curl -XPOST 'http://localhost:9200/_cluster/nodes/_local/_shutdown'" TERM KILL EXIT
 
 sed -i'' -e "s/ES_NODE_NAME/${ES_NODE_NAME-$(hostname)}/" /etc/elasticsearch/elasticsearch.yml
 sed -i'' -e "s/ES_DATA_NODE/${ES_DATA_NODE-true}/" /etc/elasticsearch/elasticsearch.yml
 sed -i'' -e "s/ES_MASTER_NODE/${ES_MASTER_NODE-true}/" /etc/elasticsearch/elasticsearch.yml
 sed -i'' -e "s/ES_CLUSTER_NAME/${ES_CLUSTER_NAME-qnib}/" /etc/elasticsearch/elasticsearch.yml
-if [ "X${ES_NET_PUBLISH}" != "X" ];then
-    if grep network.publish_host /etc/elasticsearch/elasticsearch.yml >>/dev/null;then
-        sed -i'' -e "s/network.publish_host:.*/network.publish_host: ${ES_NET_PUBLISH}/" /etc/elasticsearch/elasticsearch.yml
-    else
-        sed  -i'' "/http\.cors\.enabled/a network.publish_host: ${ES_NET_PUBLISH}" /etc/elasticsearch/elasticsearch.yml
-    fi
-fi
-if [ "X${ES_ZEN_MULTICAST_ENABLED}" != "X" ];then
-    if grep discovery.zen.ping.multicast.enabled /etc/elasticsearch/elasticsearch.yml >>/dev/null;then
-        sed  -i'' -e "s/discovery.zen.ping.multicast.enabled:.*/discovery.zen.ping.multicast.enabled: ${ES_ZEN_MULTICAST_ENABLED}/" /etc/elasticsearch/elasticsearch.yml
-    else
-        sed  -i'' "/http\.cors\.enabled/a discovery.zen.ping.multicast.enabled: ${ES_ZEN_MULTICAST_ENABLED}" /etc/elasticsearch/elasticsearch.yml
-    fi
-fi
-if [ "X${ES_ZEN_MULTICAST_HOSTS}" != "X" ];then
-    ZEN_HOSTS=""
-    for host in $(echo ${ES_ZEN_MULTICAST_HOSTS}| tr "," " ");do
-        if [ "X${ZEN_HOSTS}" != "X" ];then
-            ZEN_HOSTS="${ZEN_HOSTS}\",\"${host}"
-        else
-            ZEN_HOSTS="${host}"
-        fi
-    done
-    if grep discovery.zen.ping.unicast.hosts /etc/elasticsearch/elasticsearch.yml >>/dev/null;then
-        sed  -i'' -e "s/discovery.zen.ping.unicast.hosts:.*/discovery.zen.ping.unicast.hosts: [\"${ZEN_HOSTS}\"]/" /etc/elasticsearch/elasticsearch.yml
-    else
-        sed  -i'' "/discovery\.zen\.ping\.multicast\.enabled/a discovery.zen.ping.unicast.hosts: [\"${ZEN_HOSTS}\"]" /etc/elasticsearch/elasticsearch.yml
-    fi
-fi
 
 /usr/share/elasticsearch/bin/elasticsearch -p /var/run/elasticsearch/elasticsearch.pid \
     -Des.default.path.home=/usr/share/elasticsearch \
