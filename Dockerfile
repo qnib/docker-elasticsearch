@@ -3,9 +3,6 @@
 # - elasticsearch 
 FROM qnib/terminal
 
-EXPOSE 9200
-VOLUME ["/var/lib/elasticsearch"]
-
 # Java
 RUN yum install -y java-1.7.0-openjdk
 
@@ -22,4 +19,7 @@ ADD etc/supervisord.d/elasticsearch.ini /etc/supervisord.d/elasticsearch.ini
 ADD opt/qnib/bin/start_elasticsearch.sh /opt/qnib/bin/
 ADD etc/consul.d/check_elasticsearch.json /etc/consul.d/
 ADD etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/
+
 ENV ES_CLUSTER_NAME qnib2015
+EXPOSE 9200
+VOLUME ["/var/lib/elasticsearch"]
