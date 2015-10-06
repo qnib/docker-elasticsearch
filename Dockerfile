@@ -1,15 +1,10 @@
 ###### ES
 # A docker image that includes
 # - elasticsearch 
-FROM qnib/terminal
-
-# Java
-RUN yum install -y java-1.7.0-openjdk
+FROM qnib/java8
 
 ADD etc/yum.repos.d/elasticsearch.repo /etc/yum.repos.d/
 RUN rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
-# which is needed by ES
-RUN yum install -y which
 
 # elasticsearch
 RUN yum install -y elasticsearch
