@@ -22,6 +22,12 @@ function wait_pid {
     fi
 }
 
+if [ "X${ES_TAGS}" != "X" ];then
+   TAGS=$(python -c 'import os;print "\",\"".join(os.environ["ES_TAGS"].split(","))')
+   sed -i'' -e "s/\"tags\":.*/\"tags\": [\"${TAGS}\"],/" /etc/consul.d/check_elasticsearch.json
+   consul reload
+fi
+
 trap "curl -XPOST 'http://localhost:9200/_cluster/nodes/_local/_shutdown'" TERM KILL EXIT
 
 sed -i'' -e "s/ES_NODE_NAME/${ES_NODE_NAME-$(hostname)}/" /etc/elasticsearch/elasticsearch.yml
