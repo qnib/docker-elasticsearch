@@ -3,5 +3,3 @@ cluster.name: ES_CLUSTER_NAME
 node.name: ES_NODE_NAME
 node.master: ES_MASTER_NODE
 node.data: ES_DATA_NODE
-http.cors.allow-origin: "/.*/"
-http.cors.enabled: true
